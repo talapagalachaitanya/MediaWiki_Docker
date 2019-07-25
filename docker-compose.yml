@@ -1,30 +1,31 @@
+
 version: '2'
 services:
   mariadb:
-    image: 'bitnami/mysql:8.0'
+    image: 'chaitanyatalapagala/mariadb'
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
-      - MYSQL_USER=bn_mediawiki
-      - MYSQL_DATABASE=bitnami_mediawiki
+      - MARIADB_USER=bn_mediawiki
+      - MARIADB_DATABASE=bitnami_mediawiki
     volumes:
-      - 'mysql_data:/bitnami'
+      - 'mariadb_data:/bitnami'
   mediawiki:
-    build: .
+    image: 'chaitanyatalapagala/mediawiki'
     environment:
-      - MYSQL_HOST=mariadb
-      - MYSQL_PORT_NUMBER=3306
-      - MYSQL_DATABASE_USER=bn_mediawiki
-      - MYSQL_DATABASE_NAME=bitnami_mediawiki
+      - MARIADB_HOST=mariadb
+      - MARIADB_PORT_NUMBER=3306
+      - MEDIAWIKI_DATABASE_USER=bn_mediawiki
+      - MEDIAWIKI_DATABASE_NAME=bitnami_mediawiki
       - ALLOW_EMPTY_PASSWORD=yes
     ports:
-      - '80:8181'
-      - '443:8143'
+      - '80:80'
+      - '443:443'
     volumes:
       - 'mediawiki_data:/bitnami'
     depends_on:
-      - mysqldb
+      - mariadb
 volumes:
-  mysql_data:
+  mariadb_data:
     driver: local
   mediawiki_data:
     driver: local
