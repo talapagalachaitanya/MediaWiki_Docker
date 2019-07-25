@@ -9,8 +9,9 @@ services:
       - MARIADB_DATABASE=bitnami_mediawiki
     volumes:
       - 'mariadb_data:/bitnami'
-  mediawiki:
-    image: 'chaitanyatalapagala/mediawiki'
+      
+  mediawiki1:
+    image: 'chaitanyatalapagala/mediawiki1'
     environment:
       - MARIADB_HOST=mariadb
       - MARIADB_PORT_NUMBER=3306
@@ -29,3 +30,34 @@ volumes:
     driver: local
   mediawiki_data:
     driver: local
+    
+    mediawiki2:
+    image: 'chaitanyatalapagala/mediawiki2'
+    environment:
+      - MARIADB_HOST=mariadb
+      - MARIADB_PORT_NUMBER=3306
+      - MEDIAWIKI_DATABASE_USER=bn_mediawiki
+      - MEDIAWIKI_DATABASE_NAME=bitnami_mediawiki
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - 'mediawiki_data:/bitnami'
+    depends_on:
+      - mariadb
+volumes:
+  mariadb_data:
+    driver: local
+  mediawiki_data:
+    driver: local
+    
+    nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - mediawiki1
+      - mediawiki2
+    ports:
+      - "4000:4000"
