@@ -30,9 +30,8 @@ volumes:
     driver: local
   mediawiki_data:
     driver: local
-    
-     
-    nginx:
+      
+  nginx:
     image: nginx:latest
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
